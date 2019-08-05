@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Office
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-button (click)="presentModal()" expand="block" color ="primary">Create Account</ion-button>
+  
+    <ion-grid>
+        <ion-row>
+          <ion-col>
+            ID
+          </ion-col>
+          <ion-col>
+            Firstname
+          </ion-col>
+          <ion-col>
+            Lastname
+          </ion-col>
+          <ion-col>
+            Department
+          </ion-col>
+          <ion-col>
+            View/Edit
+          </ion-col>
+        </ion-row>
+        <ion-row *ngFor="let employee of employeeJS"> <!--let i=index did NOT work (in employeeJS[i].Firstname)-->
+            <ion-col >
+              {{employee.id.hex}}
+            </ion-col>
+            <ion-col>
+              {{employee.Firstname}}
+            </ion-col>
+            <ion-col>
+              {{employee.Lastname}}
+            </ion-col>
+            <ion-col>
+              {{employee.department}}
+            </ion-col>
+            <ion-col class="ion-float-start">
+                <ion-button size="small" (click)="view()" color ="primary">View</ion-button>
+                <ion-button size="small" (click)="edit()" color ="primary">Edit</ion-button> 
+            </ion-col>
+          </ion-row>
+    </ion-grid>
+  
+  <!--
+    <div *ngIf="selectedItem" padding>
+      You navigated here from <b>{{selectedItem.title }}</b>
+    </div>
+  -->
+</ion-content>

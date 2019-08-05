@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
-import { ListPage } from './list.page';
+import { OfficePage } from './office.page';
+import { ModalPage } from '../home/modal/modal.page';
 
 @NgModule({
   imports: [
@@ -14,10 +15,11 @@ import { ListPage } from './list.page';
     RouterModule.forChild([
       {
         path: '',
-        component: ListPage
+        component: OfficePage
       }
     ])
   ],
-  declarations: [ListPage]
+  declarations: [OfficePage, ModalPage], //added ModalPage here to be able to use it in List
+  entryComponents: [ModalPage] //Also added this line for same as above
 })
-export class ListPageModule {}
+export class OfficePageModule {}
