@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { ModalPage } from '../home/modal/modal.page';
 
+import UUID from 'uuid-js'; //I installed uuid-js from npm
+import * as _ from 'lodash';//FOR _.find(id) in edit()...
+
 @Component({
   selector: 'app-list',
   templateUrl: 'office.page.html',
@@ -9,59 +12,58 @@ import { ModalPage } from '../home/modal/modal.page';
 })
 export class OfficePage implements OnInit {
   
-  employeeJS;
+  employeeJS = [];
 
   constructor(public modalController: ModalController) {
 
   }
 
   //Following function for buttons inside Office dir (Create Acc in list.html) NOT inside Modal itsel
-  async presentModal() {
+  async presentModal(_modalFlag, _employeeData) {
     const modal = await this.modalController.create({
-      component: ModalPage
+      component: ModalPage,
+      componentProps: {
+        modalFlag: _modalFlag,
+        addFunction: this.addAccount.bind(this), //IMPORTANT TO BE ABLE TO USE IN modal.page.ts ; (this) so that this script remains the parent of those functions and we'll able to control them from here even if they are called in another
+        editFunction: this.edit.bind(this),
+        viewFunction: this.view.bind(this),
+        employeeData: _employeeData
+      }
     });
     await modal.present();
   }
 
-  edit(index): void{
-    
-    this.presentModal();
-    // this.values.firstname = this.employeeJS[index].Firstname;
-    // this.values.lastname= this.employeeJS[index].Lirstname; 
-    // this.values.DOB = this.employeeJS[index].DOB; 
-    // this.values.marriage = this.employeeJS[index].marriage; 
-    // this.values.gender = this.employeeJS[index].gender; 
-    // this.values.notes = this.employeeJS[index].notes;
-    // this.values.Hobbies = this.employeeJS[index].Hobbies; 
-    // this.values.department = this.employeeJS[index].department;
+  edit(id) {
+    //console.log(id);
+    var employeeData = _.find(this.employeeJS, function(o) { return o.id.hex === id; });
+    console.log(employeeData);
+    this.presentModal('edit', employeeData);
     //Change ADD to SAVE button and overwrite in JSON
   }
 
-  view(): void {
-    
-    //console.log(this.employeeJS[0]);
-    this.presentModal();
-    //Disable ADD button and make input fields UNCHANGEABLE
+  view(id) {
+    var employeeData = _.find(this.employeeJS, function(o) { return o.id.hex === id; });
+    console.log(employeeData);
+    this.presentModal('view', employeeData);
+    //Disable ADD button and make input fields UNCHANGEABLE (DONE IN modal.page.ts)
   }
 
-  //#region TEST FOR BINDING BUTTONS
-  // buttonType() {
-  //   var buttonType = {  
-  //      text: "View", 
-  //      edit: this.edit(), 
-  //      view: this.view(),
-  //      //add: addAccount(),
-  //   }
-  // }
-  
-  
-//   person.hello("world");  // output: "James Smith says hello world"
-//   var helloFunc = person.hello.bind({ name: "Jim Smith" });
-//   helloFunc("world");  // output: Jim Smith says hello world"
-//   //OR
-//   var helloFunc = person.hello.bind({ name: "Jim Smith" }, "world");
-//  helloFunc();  // output: Jim Smith says hello world"
-//#endregion
+  addAccount(data) {
+    var uuid4 = UUID.create();
+    var Firstname = data.firstname;//Use ngModel intead of id (in html) better! //(<HTMLInputElement>document.getElementById("Firstname")).value; //Cast because it is of type HTMLElement by default
+    var Lastname = data.lastname; //(<HTMLInputElement>document.getElementById("Lastname")).value;
+    var DOB = data.DOB; //(<HTMLInputElement>document.getElementById("DOB")).value;
+    var marriage = data.marriage; //(<HTMLInputElement>document.getElementById("Marriage")).value;
+    var gender = data.gender; //(<HTMLInputElement>document.getElementById("Gender")).value;
+    var notes = data.notes; //(<HTMLInputElement>document.getElementById("Notes")).value;
+    var hobbies = data.Hobbies; //(<HTMLInputElement>document.getElementById("Hobbies")).value; //PROBLEM: Not showing hobbies for employee
+    var dep = data.department; //(<HTMLInputElement>document.getElementById("Department")).value;
+
+    let employee1 = {'id':uuid4, 'Firstname': Firstname, 'Lastname': Lastname, 'marriage': marriage, 'gender': gender, 'DOB': DOB, 'department':dep, 'notes':notes, 'Hobbies':hobbies,};
+    this.employeeJS.push(employee1);
+    let jsonstring = JSON.stringify(this.employeeJS);
+    localStorage.setItem('employees', jsonstring);
+  }
 
 
   /* //NOT used by Office dir

@@ -3,7 +3,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { NavParams } from '@ionic/angular';
 import { ModalController } from '@ionic/angular';
 
-import UUID from 'uuid-js'; //I installed uuid-js from npm
 
 @Component({
   selector: 'modal-page',
@@ -11,10 +10,17 @@ import UUID from 'uuid-js'; //I installed uuid-js from npm
 })
 export class ModalPage implements OnInit {
   
+  buttonName = 'add';
   employees: object[] = [];
   values= {firstname: '', lastname: '', marriage: '', gender: '', DOB: '', department: '', notes: '', Hobbies: ''};
   
-  constructor(public modalController: ModalController){
+  bindedAddFunction;
+  bindedEdit;
+  bindedView;
+  bindedModalFlag;
+  employeeData;
+
+  constructor(public modalController: ModalController, public navParams: NavParams){
     
   }
  
@@ -23,10 +29,30 @@ export class ModalPage implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('this.navParams', this.navParams);
+    console.log('this.navParams 2', this.navParams.get('addFunction'));
+    this.bindedAddFunction = this.navParams.get('addFunction');
+    this.bindedEdit = this.navParams.get('editFunction');
+    this.bindedView = this.navParams.get('viewFunction');
+    this.bindedModalFlag = this.navParams.get('modalFlag');
+    this.employeeData=this.navParams.get('employeeData');
+
+    console.log(this.bindedModalFlag);
+
+    if(this.bindedModalFlag==="edit"){
+      this.buttonName="edit";
+      //CHANGE JSON (DONE IN offfice.page.ts)
+    }
+    else if(this.bindedModalFlag==="view"){
+      this.buttonName="view";
+      //DISABLE MODIFICATIONS OF INPUTS AND BUTTONS
+    }
+
     const temp = localStorage.getItem('employees');
     if (temp) { //Fetches previous data in localstorage if not empty or undefined
-      this.employees =JSON.parse(temp);
+      this.employees = JSON.parse(temp);
     }
+    
     //localStorage.clear();
     //console.log(uuid4.toString());
   }
@@ -35,21 +61,34 @@ export class ModalPage implements OnInit {
     this.modalController.dismiss();
   }
 
-  addAccount(): void {
-    var uuid4 = UUID.create();
-    var Firstname = this.values.firstname;//Use ngModel intead of id (in html) better! //(<HTMLInputElement>document.getElementById("Firstname")).value; //Cast because it is of type HTMLElement by default
-    var Lastname = this.values.lastname; //(<HTMLInputElement>document.getElementById("Lastname")).value;
-    var DOB = this.values.DOB; //(<HTMLInputElement>document.getElementById("DOB")).value;
-    var marriage = this.values.marriage; //(<HTMLInputElement>document.getElementById("Marriage")).value;
-    var gender = this.values.gender; //(<HTMLInputElement>document.getElementById("Gender")).value;
-    var notes = this.values.notes; //(<HTMLInputElement>document.getElementById("Notes")).value;
-    var hobbies = this.values.Hobbies; //(<HTMLInputElement>document.getElementById("Hobbies")).value; //PROBLEM: Not showing hobbies for employee
-    var dep = this.values.department; //(<HTMLInputElement>document.getElementById("Department")).value;
+  display(){ //Displays data from view() and edit() in office (binded)
+    this.values.firstname = this.employeeData.Firstname;
+    this.values.lastname= this.employeeData.Lirstname; 
+    this.values.DOB = this.employeeData.DOB; 
+    this.values.marriage = this.employeeData.marriage; 
+    this.values.gender = this.employeeData.gender; 
+    this.values.notes = this.employeeData.notes;
+    this.values.Hobbies = this.employeeData.Hobbies; 
+    this.values.department = this.employeeData.department;
+  }
 
-    let employee1 = {'id':uuid4, 'Firstname': Firstname, 'Lastname': Lastname, 'marriage': marriage, 'gender': gender, 'DOB': DOB, 'department':dep, 'notes':notes, 'Hobbies':hobbies,};
-    this.employees.push(employee1);
-    let jsonstring = JSON.stringify(this.employees);
-    localStorage.setItem('employees', jsonstring);
+  addAccount(): void {
+    this.bindedAddFunction(this.values);
+    //DONE IN OFFICE.page.ts BIND SO NO NEED HERE ANYMORE
+    // var uuid4 = UUID.create();
+    // var Firstname = this.values.firstname;//Use ngModel intead of id (in html) better! //(<HTMLInputElement>document.getElementById("Firstname")).value; //Cast because it is of type HTMLElement by default
+    // var Lastname = this.values.lastname; //(<HTMLInputElement>document.getElementById("Lastname")).value;
+    // var DOB = this.values.DOB; //(<HTMLInputElement>document.getElementById("DOB")).value;
+    // var marriage = this.values.marriage; //(<HTMLInputElement>document.getElementById("Marriage")).value;
+    // var gender = this.values.gender; //(<HTMLInputElement>document.getElementById("Gender")).value;
+    // var notes = this.values.notes; //(<HTMLInputElement>document.getElementById("Notes")).value;
+    // var hobbies = this.values.Hobbies; //(<HTMLInputElement>document.getElementById("Hobbies")).value; //PROBLEM: Not showing hobbies for employee
+    // var dep = this.values.department; //(<HTMLInputElement>document.getElementById("Department")).value;
+
+    // let employee1 = {'id':uuid4, 'Firstname': Firstname, 'Lastname': Lastname, 'marriage': marriage, 'gender': gender, 'DOB': DOB, 'department':dep, 'notes':notes, 'Hobbies':hobbies,};
+    // this.employees.push(employee1);
+    // let jsonstring = JSON.stringify(this.employees);
+    // localStorage.setItem('employees', jsonstring);
   }
 
   //For ngFor in modal.html

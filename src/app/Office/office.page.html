@@ -44,8 +44,8 @@
               {{employee.department}}
             </ion-col>
             <ion-col class="ion-float-start">
-                <ion-button size="small" (click)="view()" color ="primary">View</ion-button>
-                <ion-button size="small" (click)="edit()" color ="primary">Edit</ion-button> 
+                <ion-button size="small" (click)="view(employee.id.hex)" color ="primary">View</ion-button>
+                <ion-button size="small" (click)="edit(employee.id.hex)" color ="primary">Edit</ion-button> 
             </ion-col>
           </ion-row>
     </ion-grid>
