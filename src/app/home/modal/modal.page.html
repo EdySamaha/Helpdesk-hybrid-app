@@ -10,23 +10,23 @@
 </ion-header>
 
 <ion-content padding>
-    <ion-item>
+    <ion-item [disabled]="isdisabled">
         <ion-label position="floating">Firstname:</ion-label>
         <ion-input (change)="type()" [(ngModel)]="values.firstname" type="text" size="4" inputmode="text" placeholder="Enter Input"></ion-input>
     </ion-item>
 
-    <ion-item>
+    <ion-item [disabled]="isdisabled">
         <ion-label position="stacked">Lastname:</ion-label>
         <ion-input id="Lastname" [(ngModel)]="values.lastname"></ion-input>
      </ion-item>
 
-     <ion-item>
+     <ion-item [disabled]="isdisabled">
             <ion-label position="floating">Date of Birth:</ion-label>
             <ion-datetime id="DOB" [(ngModel)]="values.DOB" displayFormat="DD MM YYYY" placeholder="Select Date"></ion-datetime>
     </ion-item>
 
     <!--Select (Drop Down) MUST BE DONE USING LOOP AND TS FILE-->
-    <ion-item>
+    <ion-item [disabled]="isdisabled">
         <ion-label  position="floating">Marriage status:</ion-label>
         <ion-select id="Marriage" [(ngModel)]="values.marriage" interface="action-sheet" placeholder="Select">
             <ion-select-option value="single">Single</ion-select-option>
@@ -38,39 +38,46 @@
     <ion-list>
             <ion-radio-group id="Gender" [(ngModel)]="values.gender">
               <ion-list-header>
-                <ion-label>Gender</ion-label>
+                <ion-label>Gender:</ion-label>
               </ion-list-header>
           
-              <ion-item>
-                <ion-label>Male</ion-label>
-                <ion-radio slot="start" value="male" checked></ion-radio>
+             <!-- <ion-item [disabled]="isdisabled" *ngFor="let sex of gender">
+                <ion-label>{{sex.name}}</ion-label>
+                <ion-radio slot="start" value="sex.name" checked></ion-radio>
               </ion-item>
+            CAUSING PROBLEMS WITH RADIO BUTTON SELECTION-->
           
-              <ion-item>
+              <ion-item [disabled]="isdisabled">
+                <ion-label>Male</ion-label>
+                <ion-radio slot="start" value="male"></ion-radio>
+              </ion-item>
+
+              <ion-item [disabled]="isdisabled">
                 <ion-label>Female</ion-label>
                 <ion-radio slot="start" value="female"></ion-radio>
               </ion-item>
           
-              <ion-item>
+              <ion-item [disabled]="isdisabled">
                 <ion-label>Other</ion-label>
                 <ion-radio slot="start" value="other"></ion-radio>
               </ion-item>
+
             </ion-radio-group>
      </ion-list>
 
-     <ion-list>
+     <ion-list >
               <ion-list-header>
                 <ion-label>Hobbies:</ion-label>
               </ion-list-header>
           
-              <ion-item id="Hobbies"  *ngFor="let hobby of hobbies">
+              <ion-item [disabled]="isdisabled" id="Hobbies"  *ngFor="let hobby of hobbies">
                 <ion-label>{{hobby.name}}</ion-label>
                 <ion-checkbox slot="start" [(ngModel)]="hobby.isChecked"></ion-checkbox>
               </ion-item>
      </ion-list>
 
      
-    <ion-item>
+    <ion-item [disabled]="isdisabled">
         <ion-label  position="floating">Department:</ion-label>
         <ion-select id="Department" [(ngModel)]="values.department" placeholder="Select One">
           <!--DONE IN html LOOP using the TypeScript file (ng for angluar)-->
@@ -78,10 +85,15 @@
         </ion-select>
     </ion-item>
 
-    <ion-item>
+    <ion-item [disabled]="isdisabled">
         <ion-label position="floating">Notes:</ion-label>
         <ion-textarea id="Notes" [(ngModel)]="values.notes" rows="4" cols="10"></ion-textarea>
     </ion-item>
     
-    <ion-button (click)="addAccount();dismiss()" size="small" color ="primary">{{buttonName}}</ion-button>
+    <div class="ion-float-right">
+    <ion-button *ngIf="buttonName=='Save'" (click)="bindedDelete(employeeData.id.hex);dismiss()" size="medium" color ="danger">Delete</ion-button> <!--Only appear if we pressed edit, i.e buttonName=='Save'.Similar to bindedEdit in ts file-->
+    </div>
+
+    <!--IF buttonName=="View" button below disappear-->
+    <ion-button [hidden]="ishidden" (click)="buttonFunction();dismiss()" size="medium" color ="primary">{{buttonName}}</ion-button> <!--changed addAccount() to buttonFunction()-->
 </ion-content>

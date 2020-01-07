@@ -11,11 +11,13 @@ import { ModalController } from '@ionic/angular';
 export class ModalPage implements OnInit {
   
   buttonName = 'add';
+  ishidden=false; isdisabled=false;
   employees: object[] = [];
   values= {firstname: '', lastname: '', marriage: '', gender: '', DOB: '', department: '', notes: '', Hobbies: ''};
   
   bindedAddFunction;
   bindedEdit;
+  bindedDelete;
   bindedView;
   bindedModalFlag;
   employeeData;
@@ -33,19 +35,25 @@ export class ModalPage implements OnInit {
     console.log('this.navParams 2', this.navParams.get('addFunction'));
     this.bindedAddFunction = this.navParams.get('addFunction');
     this.bindedEdit = this.navParams.get('editFunction');
-    this.bindedView = this.navParams.get('viewFunction');
+    this.bindedDelete= this.navParams.get('deleteFunction');
+    //this.bindedView = this.navParams.get('viewFunction'); //NO NEED. ALSO COMMENTED OUT IN Office.ts viewFunction
     this.bindedModalFlag = this.navParams.get('modalFlag');
     this.employeeData=this.navParams.get('employeeData');
 
     console.log(this.bindedModalFlag);
 
     if(this.bindedModalFlag==="edit"){
-      this.buttonName="edit";
+      this.buttonName="Save";
+      this.display();
+      this.ishidden=false;
+      this.isdisabled=false;
       //CHANGE JSON (DONE IN offfice.page.ts)
     }
     else if(this.bindedModalFlag==="view"){
-      this.buttonName="view";
-      //DISABLE MODIFICATIONS OF INPUTS AND BUTTONS
+      this.buttonName=""; //NO BUTTON IF VIEW
+      this.display();
+      this.ishidden=true;     //DISABLE MODIFICATIONS OF INPUTS AND HIDES BUTTON
+      this.isdisabled=true; 
     }
 
     const temp = localStorage.getItem('employees');
@@ -61,15 +69,20 @@ export class ModalPage implements OnInit {
     this.modalController.dismiss();
   }
 
-  display(){ //Displays data from view() and edit() in office (binded)
+  display(){ //Displays data from view() and edit() in office (binded), in modal
     this.values.firstname = this.employeeData.Firstname;
-    this.values.lastname= this.employeeData.Lirstname; 
+    this.values.lastname= this.employeeData.Lastname; 
     this.values.DOB = this.employeeData.DOB; 
     this.values.marriage = this.employeeData.marriage; 
     this.values.gender = this.employeeData.gender; 
     this.values.notes = this.employeeData.notes;
-    this.values.Hobbies = this.employeeData.Hobbies; 
+    this.values.Hobbies = this.employeeData.Hobbies; //NOTE: Hobbies JSON list is empty. SHOULD use isChecked
     this.values.department = this.employeeData.department;
+  }
+
+  buttonFunction(){
+    if(this.buttonName==="add") {this.addAccount()}
+    else if(this.buttonName==="Save") {this.bindedEdit(this.employeeData, this.values)}
   }
 
   addAccount(): void {
@@ -98,6 +111,12 @@ export class ModalPage implements OnInit {
     {'name':'Architecture'},
     {'name':'Media'},
     {'name':'Business'},
+  ];
+
+  gender= [
+    {'name':'Male'},
+    {'name':'Female'},
+    {'name':'Other'},
   ];
 
   hobbies= [
