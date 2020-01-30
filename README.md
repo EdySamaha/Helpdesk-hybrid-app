@@ -1,5 +1,5 @@
 # Helpdesk hybrid application
-I was tasked to build this application using Angular and ionic framework during my internship.
+I was tasked to build this application using Angular and ionic framework during my internship as an introduction to Front-end development.
 The duration of the task was 1 week, and i had to learn how to use both tools from scratch.
 
 ## Requirements
