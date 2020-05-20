@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Home
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-card class="welcome-card">
+      <ion-card-header>
+        <ion-card-title>Welcome to Edy's Helpdesk App</ion-card-title>
+        <ion-grid>
+            <ion-row >
+              <ion-col size="7" size-md="3">
+                <div >
+                  <ion-button [routerLink]="['/office']" expand="block" color ="primary">Office</ion-button>
+                </div>
+              </ion-col>
+              <ion-col size="7" size-md="3">
+                <div>
+              <ion-button (click)="presentAlert()" expand="block" color ="secondary">Employee</ion-button>
+              </div>
+               </ion-col>
+              <ion-col size="7" size-md="3">
+                <div >
+              <ion-button (click)="presentAlert()" expand="block" color ="tertiary" >Admin</ion-button>
+              </div>
+              </ion-col>
+            </ion-row>
+        </ion-grid>
+      </ion-card-header>
+    </ion-card>
+    
+    
+    
+</ion-content>
+
+<style>
+ 
+</style>
