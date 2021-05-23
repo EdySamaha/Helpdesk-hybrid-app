@@ -31,7 +31,7 @@ export class ModalPage implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('this.navParams', this.navParams);
+    console.log('this.navParams', this.navParams); //got from Office.ts
     console.log('this.navParams 2', this.navParams.get('addFunction'));
     this.bindedAddFunction = this.navParams.get('addFunction');
     this.bindedEdit = this.navParams.get('editFunction');

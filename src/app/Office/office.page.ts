@@ -22,7 +22,7 @@ export class OfficePage implements OnInit {
   async presentModal(_modalFlag, _employeeData) {
     const modal = await this.modalController.create({
       component: ModalPage,
-      componentProps: {
+      componentProps: { //navParams
         modalFlag: _modalFlag,
         addFunction: this.addAccount.bind(this), //IMPORTANT TO BE ABLE TO USE IN modal.page.ts ; (this) so that this script remains the parent of those functions and we'll able to control them from here even if they are called in another
         editFunction: this.EditEmployee.bind(this),
